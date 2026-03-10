@@ -1,5 +1,7 @@
 import arxiv
 from summarise import summarise_papers
+import json
+from database import save_paper
 
 def fetch_papers(query, max_results=10):
     
@@ -43,5 +45,5 @@ if __name__ == "__main__":
         print()
         print(claude_summary)
         print("-" * 80)
-
+        save_paper(paper['title'], paper['authors'], paper['summary'], claude_summary, paper['published'], paper['pdf_url'])
     
