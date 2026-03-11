@@ -16,13 +16,15 @@ app.add_middleware(
 )
 
 @app.get("/")
+def serve_frontend():
+    return FileResponse("static/index.html")
+
 @app.get("/papers")
 def get_papers():
-    # conn = sqlite3.connect('papers.db')
-    # cur = conn.cursor()
-    # cur.row_factory = sqlite3.Row
-    # cur.execute("SELECT * FROM papers")
-    # rows = cur.fetchall()
-    # conn.close()
-    # return {"papers": [dict(row) for row in rows]}
-    return FileResponse("static/index.html")
+    conn = sqlite3.connect('papers.db')
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM papers")
+    rows = cur.fetchall()
+    conn.close()
+    return {"papers": [dict(row) for row in rows]}
