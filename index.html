@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PaperFlow</title>
+  <style>
+    /* A little bit of CSS to make it readable */
+    body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 20px; background: #f4f4f9; }
+    .paper-card { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    h3 { margin-top: 0; color: #2c3e50; }
+    .summary { color: #555; font-style: italic; }
+  </style>
+</head>
+<body>
+  <h1>Welcome to PaperFlow</h1>
+  <div id="papers-container">
+    <p>Loading papers...</p>
+  </div>
+
+  <script>
+    const container = document.getElementById('papers-container');
+
+    fetch('http://127.0.0.1:8000/papers')
+      .then(res => res.json())
+      .then(data => {
+        // Clear the "Loading..." message
+        container.innerHTML = '';
+
+        // Loop through each paper in the list
+        data.papers.forEach(paper => {
+          const card = document.createElement('div');
+          card.className = 'paper-card';
+          
+          card.innerHTML = `
+            <h3>${paper.title}</h3>
+            <p class="summary"><strong>Claude's Summary:</strong> ${paper.claude_summary}</p>
+            <a href="${paper.pdf_url}" target="_blank">Read Full Paper</a>
+          `;
+          
+          container.appendChild(card);
+        });
+      })
+      .catch(err => {
+        container.innerHTML = `<p style="color:red">Error: Make sure your FastAPI server is running!</p>`;
+        console.error(err);
+      });
+  </script>
+</body>
+</html>
