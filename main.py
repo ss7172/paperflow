@@ -6,7 +6,6 @@ from fastapi.staticfiles import StaticFiles
 import sqlite3
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.add_middleware(
     CORSMiddleware,
@@ -28,3 +27,5 @@ def get_papers():
     rows = cur.fetchall()
     conn.close()
     return {"papers": [dict(row) for row in rows]}
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
